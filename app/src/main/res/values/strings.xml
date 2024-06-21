@@ -16,4 +16,7 @@
     <!--finPreLogin-->
     <string name="sign_in">Iniciar sesión</string>
     <string name="error_user_password">Error en el usuario o contraseña!</string>
+
+    <string name="price">$ 12.00</string>
+
 </resources>
