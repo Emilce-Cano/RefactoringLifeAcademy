@@ -124,10 +124,6 @@ class SearchActivity : AppCompatActivity() {
                     state.data?.products?.let {
                         products = it
                         favoriteProducts = it.filter { product -> product.isFavorite == true }
-
-                        products.forEach { product ->
-                            println("Product: ${product.name}, isFavorite: ${product.isFavorite}")
-                        }
                         updateRecyclerView()
                     }
                 }
