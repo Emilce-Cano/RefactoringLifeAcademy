@@ -45,6 +45,11 @@ class SearchActivity : AppCompatActivity() {
         initSearch()
         initRecycler()
         initListener()
+        callSearch()
+    }
+
+    private fun callSearch() {
+        viewModel.searchProducts()
     }
 
     private fun initListener() {
@@ -89,7 +94,7 @@ class SearchActivity : AppCompatActivity() {
             if (showingFavorites) {
                 searchLocalFavorites(query)
             } else {
-                viewModel.loadAllProducts(productName = query)
+                viewModel.searchProducts(productName = query)
             }
         }
     }
@@ -109,12 +114,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun observers() {
-        viewModel.allProducts.observe(this) { allProducts ->
-            products = allProducts
-            favoriteProducts = allProducts.filter { it.isFavorite == true }
-            updateRecyclerView()
-        }
-
         viewModel.searchState.observe(this) { state ->
             when (state) {
                 is ProductState.Loading -> {
@@ -122,6 +121,15 @@ class SearchActivity : AppCompatActivity() {
                 }
                 is ProductState.Success -> {
                     binding.progressBarr.visibility = View.GONE
+                    state.data?.products?.let {
+                        products = it
+                        favoriteProducts = it.filter { product -> product.isFavorite == true }
+
+                        products.forEach { product ->
+                            println("Product: ${product.name}, isFavorite: ${product.isFavorite}")
+                        }
+                        updateRecyclerView()
+                    }
                 }
                 is ProductState.Error -> {
                     binding.progressBarr.visibility = View.GONE
@@ -135,6 +143,7 @@ class SearchActivity : AppCompatActivity() {
                 is ProductState.Loading -> {
                 }
                 is ProductState.Success -> {
+                    showMessageError("Favorite updated successfully")
                 }
                 is ProductState.Error -> {
                     showMessageError(state.message)

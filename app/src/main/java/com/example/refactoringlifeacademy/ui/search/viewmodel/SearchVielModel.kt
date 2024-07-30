@@ -13,17 +13,16 @@ import kotlinx.coroutines.launch
 
 class SearchVielModel(private val searchRepository: ProductRepository = ProductRepository()) :
     ViewModel() {
+    private val _searchState = MutableLiveData<ProductState<ProductsResponse>>()
+    val searchState: LiveData<ProductState<ProductsResponse>> = _searchState
 
     private val _allProducts = MutableLiveData<List<Product>>()
     val allProducts: LiveData<List<Product>> get() = _allProducts
 
-    private val _searchState = MutableLiveData<ProductState<ProductsResponse>>()
-    val searchState: LiveData<ProductState<ProductsResponse>> = _searchState
-
     private val _favoriteState = MutableLiveData<ProductState<Void>>()
     val favoriteState: LiveData<ProductState<Void>> = _favoriteState
 
-    fun loadAllProducts(
+    fun searchProducts(
         idProductType: Int? = null,
         productName: String? = null,
         onlyFavorite: Boolean = false,
